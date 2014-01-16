@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>Sponsors:</h2>
+<table>
+	<tr>
+		<td>
+		We are so poor guys, seriously!, so we want to thank <a href="https://www.viux.com/">viux</a> for providing us a server.
+		</td>
+	</tr>
+</table>
+
+<a href="https://www.viux.com/" target="new"><img src="{{ url_for('static', filename='viuxb.png.gif') }}"/></a>
+<br>
+
+<blockquote>
+So guys, if you need an hosting, a server or similars you can have a look to <a href="https://www.viux.com/">viux website</a>
+</blockquote>
+
+<h2>Affiliations:</h2>
+<blockquote>
+During our live like a team, we have met a lot of people that nowadays are our friends, so we have created this section to thank them for his friendship.
+</blockquote>
+
+<ul>
+	<li><a href="http://bugtraq-team.com/" target="new">Bugtraq Team</a></li>
+	<a href="http://bugtraq-team.com/" target="new"><img src="{{ url_for('static', filename='bugtraq.png') }}"/></a>
+	<blockquote>
+	Bugtraq Team are a group of people who have made a pentest distribution based on multiples operating systems and other projects like bugtroid.
+	</blockquote>
+	<br>
+	
+	<li><a href="http://indetectables.net/" target="new">Indetectables.net</a></li>
+	<a href="http://indetectables.net/" target="new"><img src="{{ url_for('static', filename='indt.png') }}"/></a>
+	<blockquote>
+	A forum dedicated to hacking in general that always support us
+	</blockquote>
+</ul>
+
+{% endblock %}
+
