@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>How can you write a plugin to add into grampus</h2>
+<blockquote>
+We have developed a plugin manager that allow add custom plugins, so it's easy for the user improve the tool.
+</blockquote>
+
+<h3>¿How works the plugin manager? (summarized)</h3>
+<p>
+I'm going to explain you how to works the plugin manager, you can view all the code <a href>clicking here</a>
+</p>
+
+<p>
+First, we import os and re modules, we create the class and the constructor, where we define a diccionary and we call to "load_plugins"
+</p>
+<pre>
+import os
+import re
+
+class Core(object):
+    
+    def __init__(self, route):
+        self.plugins = {}
+        self.load_plugins(route)
+</pre>
+
+<p>
+So, the "load_plugins" function, accept a route like parameter.After, taking "route" parameter, we iterate into route directory
+and we define a var to save the plugin route
+</p>
+<pre>
+def load_plugins(self, route):
+	for sFile in os.listdir(route):
+		plugin_route = os.path.join(route, sFile)
+</pre>
+
+<p>
+Then, we validate that is a correct file and we try to import a function (it will be in the plugin script)
+</p>
+<pre>
+if os.path.isfile(plugin_route):
+	if re.match("[a-z].*\.py$", sFile, re.I):
+		try:
+		   mod = __import__("{0}.{1}".format(route,
+		   sFile[:-3]))
+		   mod = getattr(mod, sFile[:-3])
+			
+		except ImportError as e:
+		   print e.args[0]
+</pre>
+
+<p>
+If the string is the name of one the object's attributes, we add the parameters sent by the <code>plugin.py</code>
+</p>
+<pre>
+if hasattr(mod, "grampus_modulo"):
+	print "Loading:", plugin_route
+	tipo, funcion, param = mod.grampus_module()
+	self.plugins[sFile] = {}
+	self.plugins[sFile]["extensions"] = param
+	self.plugins[sFile]["functions"] = funcion
+	self.plugins[sFile]["active"] = True
+	self.plugins[sFile]["name"] = sFile
+</pre>
+
+<h3>Writting the plugin</h3>
+<p>
+Now that we know how works our plugin manager, it's your turn!
+You have to add a function called "grampus_module", this function has to return us the name of the plugin, a TAG with the thematic and the extensions
+</p>
+<code>
+#"ext", data returned by "func_to_call" and a tuple with a TAG[first element] and the extensions
+</code>
+<pre>
+def grampus_module():
+    return ("ext", func_to_call, (["TAG"],"extensiones",),)
+</pre>
+
+<p>Following it's like you want, you only have to return a dictionary to parse later</p>
+<pre>
+def example_function(sFile):
+	f = open(sFile, 'r')
+	data = {'metadata':f.read()}
+	
+	return data
+</pre>
+
+<p>
+This information will be parsed later into <code>show.html</code> template, finally, we will obtained something like this:
+</p>
+<pre>
+def grampus_module():
+	return ("ext", example_function, (["FORENSIC"],"txt",))
+
+
+def example_function(sFile):
+	f = open(sFile, 'r')
+	data = {'metadata':f.read()}
+	
+	return data
+</pre>
+
+<p>And when we add the plugin to grampus we obtain...Our plugin has been loaded!!!</p>
+<img src="{{ url_for('static', filename='plugins.png') }}"/>
+<p>Is it working? O.o , so easy!!</p>
+<img src="{{ url_for('static', filename='example.png') }}"/>
+<br>
+<p>Now you can contribute with grampus project coding plugins, happy coding and love grampus.</p>
+{% endblock %}
